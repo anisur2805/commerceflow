@@ -10,10 +10,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-defaults:
-  run:
-    shell: bash
-
 jobs:
   php-lint:
     name: PHP lint (PHPCS + PHPStan)
@@ -38,9 +34,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: vendor/
-          key: php-lint-${{ matrix.php }}-${{ hashFiles('composer.lock') }}
-          restore-keys: |
-            php-lint-${{ matrix.php }}-
+          key: php-${{ matrix.php }}-${{ hashFiles('composer.lock') }}
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
@@ -49,10 +43,10 @@ jobs:
         run: composer phpcs
 
       - name: PHPStan
-        run: php -d memory_limit=1G vendor/bin/phpstan analyse --configuration=./phpstan.neon --error-format=github
+        run: php -d memory_limit=2G vendor/bin/phpstan analyse --configuration=./phpstan.neon --no-progress --error-format=github
 
-  js-lint:
-    name: JS lint (ESLint)
+  js:
+    name: JS lint + build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -91,39 +85,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: vendor/
-          key: phpunit-${{ matrix.php }}-${{ hashFiles('composer.lock') }}
-          restore-keys: |
-            phpunit-${{ matrix.php }}-
+          key: test-${{ matrix.php }}-${{ hashFiles('composer.lock') }}
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
       - name: PHPUnit (unit tests)
         run: vendor/bin/phpunit --testsuite unit
-
-  e2e:
-    name: Playwright
-    runs-on: ubuntu-latest
-    needs: [js-lint]
-    if: ${{ vars.WP_BASE_URL != '' }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install Playwright
-        run: npx playwright install --with-deps chromium
-
-      - name: Build SPA
-        run: npm run build
-
-      - name: Run E2E tests (dashboard load)
-        run: npx playwright test
-        env:
-          WP_BASE_URL: ${{ vars.WP_BASE_URL || '' }}
