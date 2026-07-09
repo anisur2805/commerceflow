@@ -74,11 +74,10 @@ class CacheModule implements ModuleInterface {
 			return $cached;
 		}
 
-		$data = $compute();
-
+		$data     = $compute();
 		$defaults = array( 'dashboard_cache_ttl' => self::CACHE_TTL );
 		$settings = get_option( 'commerceflow_settings', $defaults );
-		$ttl      = isset( $settings['dashboard_cache_ttl'] ) ? absint( $settings['dashboard_cache_ttl'] ) : self::CACHE_TTL;
+		$ttl      = CacheUtils::resolve_ttl( $settings, self::CACHE_TTL );
 
 		set_transient( self::DASHBOARD_TRANSIENT, $data, $ttl );
 		return $data;
