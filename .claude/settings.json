@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(composer:*)",
+      "Bash(php:*)",
+      "Bash(node:*)",
+      "Bash(npm:*)",
+      "Bash(npx:*)",
+      "Bash(wp:*)",
+      "Bash(git:*)",
+      "Bash(vendor/bin/*)",
+      "Bash(./vendor/bin/*)",
+      "Bash(phpunit:*)",
+      "Bash(phpcs:*)",
+      "Bash(phpcbf:*)",
+      "Bash(phpstan:*)",
+      "Bash(eslint:*)",
+      "Bash(prettier:*)"
+    ],
+    "deny": [
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "npx prettier --write \"$CLAUDE_FILE_PATH\" 2>/dev/null || true" }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "echo \"$CLAUDE_TOOL_INPUT\" | grep -qE 'rm -rf|git push --force' && exit 2 || true" }
+        ]
+      }
+    ]
+  }
+}
