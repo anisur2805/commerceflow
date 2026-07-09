@@ -99,12 +99,13 @@ jobs:
         run: composer install --prefer-dist --no-progress
 
       - name: PHPUnit (unit tests)
-        run: vendor/bin/phpunit --testsuite unit --display-deprecations
+        run: vendor/bin/phpunit --testsuite unit
 
   e2e:
     name: Playwright
     runs-on: ubuntu-latest
     needs: [js-lint]
+    if: ${{ vars.WP_BASE_URL != '' }}
     steps:
       - uses: actions/checkout@v4
 

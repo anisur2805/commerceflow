@@ -5,12 +5,16 @@ export default defineConfig( {
 	timeout: 30000,
 	retries: 1,
 	use: {
-		baseURL: process.env.WP_BASE_URL || 'http://commerceflow.local/wp-admin',
+		baseURL:
+			process.env.WP_BASE_URL || 'http://commerceflow.local/wp-admin',
 		headless: true,
 	},
-	webServer: {
-		command: 'npm run build',
-		port: 3000,
-		reuseExistingServer: true,
-	},
+	// The E2E tests require a real WordPress + WooCommerce instance.
+	// Skip them on CI unless WP_BASE_URL is explicitly set.
+	projects: [
+		{
+			name: 'wp-e2e',
+			testMatch: '**/*.spec.ts',
+		},
+	],
 } );
