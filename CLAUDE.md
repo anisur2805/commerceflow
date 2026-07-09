@@ -36,8 +36,8 @@ Model is **trigger → condition(s) → action(s)**, stored in dedicated rules +
 
 1. **Loop prevention** — an action mutating an order must not re-trigger its own rule; enforce a configurable recursion/depth guard and log suppressed re-entries.
 2. **Idempotency** — retried Action Scheduler jobs must not double-apply (no duplicate coupon/note/status write).
-3. **Partial failure** — if action *n* of *m* fails, order state stays uncorrupt; log with context; apply documented continue/stop policy.
-4. **Dry-run** — test a rule and report what *would* happen, writing no order changes.
+3. **Partial failure** — if action _n_ of _m_ fails, order state stays uncorrupt; log with context; apply documented continue/stop policy.
+4. **Dry-run** — test a rule and report what _would_ happen, writing no order changes.
 
 ## Release plan (vertical slices — ship each complete)
 
@@ -64,4 +64,4 @@ Feature works · REST endpoints where applicable · HPOS-compatible · sanitized
 
 ## Docs
 
-`PRD.md` is doc 00. **Present now:** `README.md`, `CHANGELOG.md`, `ROADMAP.md` (required by the Definition of Done). **Deferred by design:** the deep companion docs (`docs/01-system-architecture.md` … `13-github-actions.md`, ADRs under `docs/adr/`) are written *alongside the slice that implements them*, not upfront — stub architecture docs describing unbuilt code would overclaim, which PRD §0 forbids. Create each doc when its slice lands, and update `CHANGELOG.md` + `ROADMAP.md` as part of that slice's DoD.
+`PRD.md` is doc 00. **Present now:** `README.md`, `CHANGELOG.md`, `ROADMAP.md` (required by the Definition of Done). **Deferred by design:** the deep companion docs (`docs/01-system-architecture.md` … `13-github-actions.md`, ADRs under `docs/adr/`) are written _alongside the slice that implements them_, not upfront — stub architecture docs describing unbuilt code would overclaim, which PRD §0 forbids. Create each doc when its slice lands, and update `CHANGELOG.md` + `ROADMAP.md` as part of that slice's DoD.

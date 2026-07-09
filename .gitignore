@@ -4,6 +4,7 @@
 
 # Build output
 /build/
+/assets/build/
 /dist/
 *.map
 

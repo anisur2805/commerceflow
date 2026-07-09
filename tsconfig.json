@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"target": "ES2020",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"jsx": "react-jsx",
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"declaration": false,
+		"outDir": "assets/build",
+		"rootDir": "assets/src",
+		"baseUrl": ".",
+		"paths": {
+			"@wordpress/*": [ "node_modules/@wordpress/*" ]
+		},
+		"typeRoots": [ "node_modules/@types" ]
+	},
+	"include": [ "assets/src/**/*" ],
+	"exclude": [ "node_modules", "assets/build" ]
+}

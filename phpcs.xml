@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<ruleset name="CommerceFlow">
+	<description>CommerceFlow coding standards — WordPress-Extra plus PHPCompatibilityWP.</description>
+
+	<arg name="extensions" value="php"/>
+	<arg name="colors"/>
+	<arg value="s"/>
+
+	<file>./src/</file>
+	<file>./commerceflow.php</file>
+	<file>./uninstall.php</file>
+
+	<exclude-pattern>./vendor/*</exclude-pattern>
+
+	<rule ref="WordPress-Extra">
+		<exclude name="Generic.Commenting.DocComment.MissingShort"/>
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+		<exclude name="WordPress.PHP.YodaConditions.NotYoda"/>
+		<exclude name="WordPress.WP.Capabilities.Unknown"/>
+	</rule>
+
+	<rule ref="PHPCompatibilityWP"/>
+
+	<!-- The DI container uses $abstract as a parameter name; reserved keyword is intentional. -->
+	<rule ref="Universal.NamingConventions.NoReservedKeywordParameterNames">
+		<exclude-pattern>./src/Container/Container.php</exclude-pattern>
+	</rule>
+
+	<config name="minimum_supported_wp_version" value="6.4"/>
+	<config name="testVersion" value="8.1-"/>
+</ruleset>

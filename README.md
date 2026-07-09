@@ -2,7 +2,7 @@
 
 A WooCommerce operations & automation platform: a single modern React admin dashboard to observe your store and automate the order lifecycle — analytics, event-driven rules, custom fulfillment workflows, and rule-based shipping — without writing code.
 
-> **Status:** pre-release / in development. Features are listed here only once they ship. See [`ROADMAP.md`](ROADMAP.md) for what's planned and [`CHANGELOG.md`](CHANGELOG.md) for what's landed.
+> **Status:** [v0.1 released](CHANGELOG.md#010--2026-07-09) — Walking skeleton + dashboard. See [`ROADMAP.md`](ROADMAP.md) for what's planned.
 
 ## Requirements
 
@@ -12,7 +12,7 @@ A WooCommerce operations & automation platform: a single modern React admin dash
 
 ## What it does
 
-The differentiator is the **Automation Rules Engine**: merchants define event-driven rules (*trigger → condition → action*) that are evaluated asynchronously via Action Scheduler and interact with WooCommerce orders through the CRUD layer, so everything stays fully HPOS-compatible.
+The differentiator is the **Automation Rules Engine**: merchants define event-driven rules (_trigger → condition → action_) that are evaluated asynchronously via Action Scheduler and interact with WooCommerce orders through the CRUD layer, so everything stays fully HPOS-compatible.
 
 Shipping in vertical slices — each release is independently installable:
 

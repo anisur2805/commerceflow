@@ -1,0 +1,32 @@
+{
+	"name": "commerceflow",
+	"version": "0.1.0",
+	"description": "CommerceFlow WooCommerce admin SPA.",
+	"license": "GPL-2.0-or-later",
+	"private": true,
+	"scripts": {
+		"build": "wp-scripts build --webpack-src-dir=assets/src --output-path=assets/build",
+		"start": "wp-scripts start --webpack-src-dir=assets/src --output-path=assets/build",
+		"lint": "eslint assets/src --ext .ts,.tsx",
+		"lint:fix": "eslint assets/src --ext .ts,.tsx --fix",
+		"packages-update": "wp-scripts packages-update",
+		"test:e2e": "playwright test"
+	},
+	"devDependencies": {
+		"@playwright/test": "^1.61.1",
+		"@types/react": "^18.3.0",
+		"@types/react-dom": "^18.3.0",
+		"@wordpress/api-fetch": "^7.0.0",
+		"@wordpress/components": "^29.0.0",
+		"@wordpress/data": "^10.0.0",
+		"@wordpress/dom-ready": "^4.0.0",
+		"@wordpress/element": "^6.0.0",
+		"@wordpress/hooks": "^4.0.0",
+		"@wordpress/i18n": "^5.0.0",
+		"@wordpress/scripts": "^30.0.0",
+		"eslint-plugin-react": "^7.37.0",
+		"eslint-plugin-react-hooks": "^5.1.0",
+		"react-router-dom": "^6.28.0",
+		"typescript": "^5.7.0"
+	}
+}

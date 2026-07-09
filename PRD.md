@@ -1,16 +1,16 @@
 # CommerceFlow for WooCommerce — Product Requirements Document (PRD)
 
-| | |
-|---|---|
-| **Document** | `PRD.md` (doc 00 of the `docs/` set) |
-| **Status** | Draft — v0.1 scope approved |
-| **Owner** | Anisur Rahman (ClanDevs) |
-| **Doc version** | 1.0 |
-| **Last updated** | 2026-07-09 |
-| **License** | GPL v2+ |
-| **Repository** | Public GitHub |
+|                  |                                      |
+| ---------------- | ------------------------------------ |
+| **Document**     | `PRD.md` (doc 00 of the `docs/` set) |
+| **Status**       | Draft — v0.1 scope approved          |
+| **Owner**        | Anisur Rahman (ClanDevs)             |
+| **Doc version**  | 1.0                                  |
+| **Last updated** | 2026-07-09                           |
+| **License**      | GPL v2+                              |
+| **Repository**   | Public GitHub                        |
 
-> **Scope of this document.** This PRD defines *what* CommerceFlow is, *who* it's for, *why* it exists, and *what "done" means* for each release. It deliberately does **not** contain architecture, folder structure, database DDL, REST request/response schemas, or component design. Those live in the companion docs listed in [§12](#12-related-documents). Keep this file at the requirements layer so it stays valid as the implementation evolves.
+> **Scope of this document.** This PRD defines _what_ CommerceFlow is, _who_ it's for, _why_ it exists, and _what "done" means_ for each release. It deliberately does **not** contain architecture, folder structure, database DDL, REST request/response schemas, or component design. Those live in the companion docs listed in [§12](#12-related-documents). Keep this file at the requirements layer so it stays valid as the implementation evolves.
 
 ---
 
@@ -19,15 +19,15 @@
 CommerceFlow has two honest purposes, and both shape the requirements below:
 
 1. **A genuinely usable product** — a WooCommerce operations layer a real store could install and benefit from.
-2. **A senior-engineering demonstration** — a public repository that answers one specific interview question: *"Can this engineer build production-grade WooCommerce systems?"*
+2. **A senior-engineering demonstration** — a public repository that answers one specific interview question: _"Can this engineer build production-grade WooCommerce systems?"_
 
 This dual intent drives three decisions that run through the whole PRD:
 
-- **It complements ProofPulse, not duplicates it.** ProofPulse already demonstrates modern WordPress tooling (TypeScript, Gutenberg blocks, Vite, PSR-4, testing). CommerceFlow's job is *WooCommerce depth* — HPOS-correct data work, background processing, a React admin, and an event-driven automation engine. Anything that only re-proves "modern WordPress plugin" is out of scope.
-- **Ship v0.1 small and complete, then extend.** A finished, green-CI plugin outperforms a half-built platform. The MVP ([§5](#5-scope--release-plan)) is intentionally one to two weeks of work, not the full feature set. Later slices are additive and each must ship *complete*.
+- **It complements ProofPulse, not duplicates it.** ProofPulse already demonstrates modern WordPress tooling (TypeScript, Gutenberg blocks, Vite, PSR-4, testing). CommerceFlow's job is _WooCommerce depth_ — HPOS-correct data work, background processing, a React admin, and an event-driven automation engine. Anything that only re-proves "modern WordPress plugin" is out of scope.
+- **Ship v0.1 small and complete, then extend.** A finished, green-CI plugin outperforms a half-built platform. The MVP ([§5](#5-scope--release-plan)) is intentionally one to two weeks of work, not the full feature set. Later slices are additive and each must ship _complete_.
 - **Never overclaim.** No capability is described as present until it exists in the public repo with passing CI. The completeness bar rises with every feature claimed.
 
-**Primary target audience for the demonstration:** WordPress *product* companies (e.g. plugin/product teams). This PRD is optimized for that signal. It is a weaker fit for cross-platform agency work (WPML / Shopify / Magento / WPGraphQL / PSD-to-pixel); if that becomes the priority audience, the release plan should be re-weighted before building.
+**Primary target audience for the demonstration:** WordPress _product_ companies (e.g. plugin/product teams). This PRD is optimized for that signal. It is a weaker fit for cross-platform agency work (WPML / Shopify / Magento / WPGraphQL / PSD-to-pixel); if that becomes the priority audience, the release plan should be re-weighted before building.
 
 ---
 
@@ -35,7 +35,7 @@ This dual intent drives three decisions that run through the whole PRD:
 
 CommerceFlow is a WooCommerce operations and automation platform. It gives store owners a single modern React dashboard to observe their store and to automate the order lifecycle — from analytics, to event-driven rules, to custom fulfillment workflows and shipping logic — without writing code.
 
-The differentiator is the **Automation Rules Engine**: merchants define event-driven rules (*trigger → condition → action*) that are evaluated asynchronously, stored in dedicated tables, executed through Action Scheduler, and interact with WooCommerce orders through the CRUD layer so they remain fully HPOS-compatible.
+The differentiator is the **Automation Rules Engine**: merchants define event-driven rules (_trigger → condition → action_) that are evaluated asynchronously, stored in dedicated tables, executed through Action Scheduler, and interact with WooCommerce orders through the CRUD layer so they remain fully HPOS-compatible.
 
 ---
 
@@ -60,11 +60,11 @@ The differentiator is the **Automation Rules Engine**: merchants define event-dr
 
 ## 3. Target users
 
-| Persona | Description | Primary needs |
-|---|---|---|
-| **Store Owner** (primary) | Runs a WooCommerce store; not a developer. | See store health at a glance; automate repetitive order handling; configure rules and shipping without code. |
-| **Store Staff / Fulfillment** | Processes orders day-to-day. | A clear fulfillment workflow with statuses, a per-order timeline, and reliable status transitions. |
-| **Developer / Integrator** (secondary) | Extends or audits the plugin. | Clean modular architecture, REST endpoints, documented extension points, dedicated tables instead of postmeta abuse. |
+| Persona                                | Description                                | Primary needs                                                                                                        |
+| -------------------------------------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| **Store Owner** (primary)              | Runs a WooCommerce store; not a developer. | See store health at a glance; automate repetitive order handling; configure rules and shipping without code.         |
+| **Store Staff / Fulfillment**          | Processes orders day-to-day.               | A clear fulfillment workflow with statuses, a per-order timeline, and reliable status transitions.                   |
+| **Developer / Integrator** (secondary) | Extends or audits the plugin.              | Clean modular architecture, REST endpoints, documented extension points, dedicated tables instead of postmeta abuse. |
 
 ---
 
@@ -89,7 +89,7 @@ The differentiator is the **Automation Rules Engine**: merchants define event-dr
 
 Development proceeds as **vertical slices**. Each release is independently installable and shipped to its Definition of Done ([§7.6](#76-definition-of-done-every-release)). Horizontal concerns (REST, DB, tests, CI) are built incrementally, only as far as the current slice needs.
 
-### 5.1 v0.1 — Walking skeleton + Dashboard *(MVP — target 1–2 weeks)*
+### 5.1 v0.1 — Walking skeleton + Dashboard _(MVP — target 1–2 weeks)_
 
 The smallest end-to-end product that already shows the target signal.
 
@@ -104,7 +104,7 @@ The smallest end-to-end product that already shows the target signal.
 
 **Done when:** installs clean on WP + Woo (HPOS on), dashboard renders cached Woo-native metrics, settings persist via REST, CI green.
 
-### 5.2 v0.2 — Automation Rules Engine *(the centerpiece)*
+### 5.2 v0.2 — Automation Rules Engine _(the centerpiece)_
 
 - Dedicated tables for rules + rule logs.
 - Rule model: **trigger → condition(s) → action(s)**, evaluated asynchronously via Action Scheduler.
@@ -136,47 +136,47 @@ Block-based **Checkout Builder** (Store API / Additional Checkout Fields), **Imp
 
 Requirements use stable IDs. Acceptance criteria are testable. Implementation detail is intentionally absent — see companion docs.
 
-### 6.1 Admin SPA & Settings *(v0.1)*
+### 6.1 Admin SPA & Settings _(v0.1)_
 
 - **FR-ADMIN-1** — The plugin registers a single admin menu that loads a React SPA built with `@wordpress/scripts`.
-  - *Accept:* SPA loads inside wp-admin; client-side routing between pages works with no full page reload; loading and error states render for every async view.
+  - _Accept:_ SPA loads inside wp-admin; client-side routing between pages works with no full page reload; loading and error states render for every async view.
 - **FR-ADMIN-2** — All admin data flows through REST endpoints, never inline PHP-echoed state.
 - **FR-SET-1** — Merchant can view and update plugin settings, persisted via `GET/PUT /settings`.
-  - *Accept:* saved settings survive reload; invalid input is rejected server-side with a clear error; success/failure surfaces as a toast.
+  - _Accept:_ saved settings survive reload; invalid input is rejected server-side with a clear error; success/failure surfaces as a toast.
 
-### 6.2 Dashboard & Analytics *(v0.1, extended per slice)*
+### 6.2 Dashboard & Analytics _(v0.1, extended per slice)_
 
 - **FR-DASH-1** — Dashboard displays WooCommerce-native operational metrics: orders today, revenue today, pending orders, failed payments, 30-day revenue chart, top products.
-  - *Accept:* figures reconcile with WooCommerce order data for the same period; chart renders from real data.
+  - _Accept:_ figures reconcile with WooCommerce order data for the same period; chart renders from real data.
 - **FR-DASH-2** — Metrics are cached with a defined TTL and invalidated when relevant order events occur.
-  - *Accept:* warm-cache dashboard read meets PM2; a new/changed order invalidates the affected metric within the defined window.
+  - _Accept:_ warm-cache dashboard read meets PM2; a new/changed order invalidates the affected metric within the defined window.
 - **FR-DASH-3** — Each later slice may add exactly one card for its own module; **no card is shown for a module that is not yet shipped.**
 
-### 6.3 Automation Rules Engine *(v0.2)*
+### 6.3 Automation Rules Engine _(v0.2)_
 
-- **FR-AUTO-1** — Merchant can create a rule as *trigger → condition(s) → action(s)* and enable/disable/prioritize it via the React builder and `/automation` REST.
+- **FR-AUTO-1** — Merchant can create a rule as _trigger → condition(s) → action(s)_ and enable/disable/prioritize it via the React builder and `/automation` REST.
 - **FR-AUTO-2** — Supported triggers (initial set): order created, order paid, order failed, order status changed. Supported actions (initial set): change status, add order note, generate coupon, call webhook. (Full lists live in `07-automation-engine.md`.)
 - **FR-AUTO-3** — Rules are evaluated **asynchronously** via Action Scheduler, not inline in the request that fired the trigger.
 - **FR-AUTO-4 (loop prevention)** — An action that mutates an order MUST NOT cause the same rule to re-trigger itself; the engine enforces a configurable recursion/depth guard and records suppressed re-entries.
-  - *Accept:* a rule whose action would re-satisfy its own trigger runs once, not unbounded; suppression is logged.
+  - _Accept:_ a rule whose action would re-satisfy its own trigger runs once, not unbounded; suppression is logged.
 - **FR-AUTO-5 (idempotency)** — Rule execution MUST be idempotent under Action Scheduler retries; a retried job does not double-apply its actions.
-  - *Accept:* forcing a retry of a completed action produces no duplicate coupon / duplicate note / duplicate status write.
-- **FR-AUTO-6 (partial failure)** — If action *n* of *m* fails, order state is not left corrupt; the failure is logged with context and the engine's continue/stop policy is applied and documented.
-  - *Accept:* a deliberately failing middle action leaves earlier actions intact, later actions handled per policy, and a clear log entry written.
+  - _Accept:_ forcing a retry of a completed action produces no duplicate coupon / duplicate note / duplicate status write.
+- **FR-AUTO-6 (partial failure)** — If action _n_ of _m_ fails, order state is not left corrupt; the failure is logged with context and the engine's continue/stop policy is applied and documented.
+  - _Accept:_ a deliberately failing middle action leaves earlier actions intact, later actions handled per policy, and a clear log entry written.
 - **FR-AUTO-7 (dry-run)** — Merchant can test a rule without applying its actions.
-  - *Accept:* dry-run reports what *would* happen and writes no order changes.
+  - _Accept:_ dry-run reports what _would_ happen and writes no order changes.
 
-### 6.4 Order Workflow & Timeline *(v0.3)*
+### 6.4 Order Workflow & Timeline _(v0.3)_
 
 - **FR-FLOW-1** — Plugin registers custom order statuses stored HPOS-compatibly, with guarded transitions.
 - **FR-FLOW-2** — Each order has a timeline/activity log of status changes and automation actions, readable via `/orders` and `/logs`.
-  - *Accept:* every transition and automated action appears in the timeline with actor and timestamp.
+  - _Accept:_ every transition and automated action appears in the timeline with actor and timestamp.
 
-### 6.5 Shipping Rules Engine *(v0.4)*
+### 6.5 Shipping Rules Engine _(v0.4)_
 
 - **FR-SHIP-1** — Merchant can define priority-ordered shipping rules across the supported conditions and enable/disable them via `/shipping` REST and the React UI.
 - **FR-SHIP-2** — A test/preview tool shows which rule wins for a given basket/destination.
-  - *Accept:* preview output matches actual applied shipping at checkout for the same inputs.
+  - _Accept:_ preview output matches actual applied shipping at checkout for the same inputs.
 
 ### 6.6 Deferred feature requirements
 
@@ -188,13 +188,13 @@ Block **Checkout Builder**, **Import Engine**, **Coupon Engine**, **WP-CLI**, an
 
 ### 7.1 Compatibility
 
-| Target | Requirement |
-|---|---|
-| PHP | 8.1+ |
-| WordPress | Latest stable |
-| WooCommerce | Latest stable, **HPOS-first** |
+| Target            | Requirement                                                          |
+| ----------------- | -------------------------------------------------------------------- |
+| PHP               | 8.1+                                                                 |
+| WordPress         | Latest stable                                                        |
+| WooCommerce       | Latest stable, **HPOS-first**                                        |
 | Order data access | Via WooCommerce **CRUD** layer only — no direct postmeta assumptions |
-| Browsers | Current evergreen browsers; responsive admin |
+| Browsers          | Current evergreen browsers; responsive admin                         |
 
 - **NFR-COMPAT-1** — The plugin declares HPOS compatibility and performs all order reads/writes through CRUD so it works with custom order tables enabled.
 
@@ -230,7 +230,7 @@ A slice is done only when: the feature works · REST endpoints added where appli
 
 - **C1** — Solo developer; effort is bounded. The MVP is scoped to be finishable in 1–2 weeks alongside other commitments.
 - **C2** — Public GPL repository; nothing proprietary or client-derived is included (personal project kept strictly separate from any client work).
-- **C3** — The audience assumption is WordPress *product* companies; a shift to agency-breadth targeting invalidates parts of the release plan (see R4).
+- **C3** — The audience assumption is WordPress _product_ companies; a shift to agency-breadth targeting invalidates parts of the release plan (see R4).
 - **A1** — Action Scheduler is available (bundled with WooCommerce).
 - **A2** — Test/dev environments run WooCommerce with HPOS enabled.
 
@@ -249,13 +249,13 @@ Exact versions and configuration are pinned in `03-coding-standards.md` and the 
 
 ## 10. Risks & open questions
 
-| ID | Risk / question | Impact | Mitigation |
-|---|---|---|---|
-| **R1** | Automation engine is framed as "less work than Stripe" but has comparable difficulty (loops, idempotency, partial failure, concurrency). | Under-estimation; the centerpiece becomes a liability if incomplete. | Treated as first-class hard requirements (FR-AUTO-4..7) with explicit acceptance tests; not shipped until they pass. |
-| **R2** | Scope creep back toward the full 17-phase platform. | Never ships; competes with active job search and near-term deliverables. | v0.1 is fixed small; later slices are additive and optional; non-goals enumerated. |
-| **R3** | Dashboard-first shows empty cards for unbuilt modules, killing the "looks like SaaS" effect. | Weak first impression. | v0.1 dashboard shows Woo-native metrics only; each slice adds its own card (FR-DASH-3). |
-| **R4** | Product-company targeting vs. agency-breadth targeting. | If the nearest live pipeline is agency work, this product barely speaks to it. | Audience assumption stated (C3); re-weight release plan before building if that changes. |
-| **R5** | Building an elaborate plugin can substitute for the higher-value work of applying/interviewing. | Feels productive while delaying outcomes. | Ship v0.1, put it into applications, extend only if still searching. |
+| ID     | Risk / question                                                                                                                          | Impact                                                                         | Mitigation                                                                                                           |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| **R1** | Automation engine is framed as "less work than Stripe" but has comparable difficulty (loops, idempotency, partial failure, concurrency). | Under-estimation; the centerpiece becomes a liability if incomplete.           | Treated as first-class hard requirements (FR-AUTO-4..7) with explicit acceptance tests; not shipped until they pass. |
+| **R2** | Scope creep back toward the full 17-phase platform.                                                                                      | Never ships; competes with active job search and near-term deliverables.       | v0.1 is fixed small; later slices are additive and optional; non-goals enumerated.                                   |
+| **R3** | Dashboard-first shows empty cards for unbuilt modules, killing the "looks like SaaS" effect.                                             | Weak first impression.                                                         | v0.1 dashboard shows Woo-native metrics only; each slice adds its own card (FR-DASH-3).                              |
+| **R4** | Product-company targeting vs. agency-breadth targeting.                                                                                  | If the nearest live pipeline is agency work, this product barely speaks to it. | Audience assumption stated (C3); re-weight release plan before building if that changes.                             |
+| **R5** | Building an elaborate plugin can substitute for the higher-value work of applying/interviewing.                                          | Feels productive while delaying outcomes.                                      | Ship v0.1, put it into applications, extend only if still searching.                                                 |
 
 ---
 
@@ -267,7 +267,7 @@ Payment gateway in MVP · multisite · multi-vendor · GraphQL · AI assistant �
 
 ## 12. Related documents
 
-This PRD is doc 00 of the engineering set. Detailed *how* lives in focused companion docs so each stays current independently:
+This PRD is doc 00 of the engineering set. Detailed _how_ lives in focused companion docs so each stays current independently:
 
 ```
 docs/
@@ -295,6 +295,6 @@ Architecture Decision Records (ADRs) capture individual decisions (e.g. "HPOS-fi
 
 ## 13. Document changelog
 
-| Version | Date | Change |
-|---|---|---|
-| 1.0 | 2026-07-09 | Initial PRD. v0.1 (walking skeleton + Woo-native dashboard) scope approved; automation engine established as centerpiece with loop/idempotency/partial-failure as hard requirements; Stripe/import/coupons/checkout/CLI deferred. |
+| Version | Date       | Change                                                                                                                                                                                                                            |
+| ------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.0     | 2026-07-09 | Initial PRD. v0.1 (walking skeleton + Woo-native dashboard) scope approved; automation engine established as centerpiece with loop/idempotency/partial-failure as hard requirements; Stripe/import/coupons/checkout/CLI deferred. |
