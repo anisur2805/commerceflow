@@ -124,6 +124,6 @@ jobs:
         run: npm run build
 
       - name: Run E2E tests (dashboard load)
-        run: npx playwright test --project=chromium
+        run: npx playwright test
         env:
-          WP_BASE_URL: ${{ vars.WP_BASE_URL || 'http://localhost:8889/wp-admin' }}
+          WP_BASE_URL: ${{ vars.WP_BASE_URL || '' }}
