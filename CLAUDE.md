@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Current state
 
-This repository is **pre-implementation**. The only file present is `PRD.md` (the product requirements document). There is no source code, `composer.json`, `package.json`, build config, tests, or git history yet. When implementing, scaffold the toolchain described below — do not assume it already exists.
+v0.1 is shipped — the walking skeleton + WooCommerce-native dashboard. The plugin has a DI container, module loader, REST endpoints for `/dashboard` and `/settings`, a React/TS SPA with Dashboard and Settings pages, HPOS compatibility, transient caching, PHPUnit unit tests, and a GitHub Actions CI pipeline (PHPCS, PHPStan, ESLint, PHPUnit).
+
+The Automation Rules Engine (v0.2) is the next slice and the project's centerpiece.
 
 CommerceFlow is a WooCommerce operations & automation plugin. It has a dual purpose that shapes every decision: (1) a genuinely usable WooCommerce ops layer, and (2) a senior-engineering demonstration of production-grade WooCommerce depth (HPOS-correct data work, background processing, a React admin, an event-driven automation engine). Anything that only re-proves "modern WordPress plugin" is out of scope.
 

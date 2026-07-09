@@ -9,8 +9,19 @@
  */
 import { useState, useEffect, useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { ToggleControl, Button, Spinner, Notice } from '@wordpress/components';
+import {
+	ToggleControl,
+	Button,
+	Spinner,
+	Notice,
+	TextControl,
+} from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
+
+/**
+ * Internal dependencies
+ */
+import { useToastContext } from '../components/AdminPage';
 
 interface Settings {
 	enable_dashboard_cache: boolean;
@@ -31,6 +42,7 @@ export function SettingsPage() {
 		message: string;
 	} | null >( null );
 	const [ error, setError ] = useState< string | null >( null );
+	const { addToast } = useToastContext();
 
 	useEffect( () => {
 		apiFetch< Settings >( { path: 'commerceflow/v1/settings' } )
@@ -53,6 +65,16 @@ export function SettingsPage() {
 		);
 	}, [] );
 
+	const handleTtlChange = useCallback( ( value: string ) => {
+		const num = parseInt( value, 10 );
+		if ( isNaN( num ) || num < 30 ) {
+			return;
+		}
+		setSettings( ( prev ) =>
+			prev ? { ...prev, dashboard_cache_ttl: num } : prev
+		);
+	}, [] );
+
 	const handleSave = useCallback( () => {
 		if ( ! settings ) {
 			return;
@@ -72,6 +94,10 @@ export function SettingsPage() {
 					type: 'success',
 					message: __( 'Settings saved.', 'commerceflow' ),
 				} );
+				addToast(
+					__( 'Settings saved successfully.', 'commerceflow' ),
+					'success'
+				);
 				setIsSaving( false );
 			} )
 			.catch( ( err: Error & { message?: string } ) => {
@@ -81,9 +107,14 @@ export function SettingsPage() {
 						err?.message ??
 						__( 'Failed to save settings.', 'commerceflow' ),
 				} );
+				addToast(
+					err?.message ??
+						__( 'Failed to save settings.', 'commerceflow' ),
+					'error'
+				);
 				setIsSaving( false );
 			} );
-	}, [ settings ] );
+	}, [ settings, addToast ] );
 
 	if ( isLoading ) {
 		return <Spinner />;
@@ -139,6 +170,19 @@ export function SettingsPage() {
 					) }
 					checked={ settings.enable_dashboard_cache }
 					onChange={ handleToggle }
+				/>
+
+				<TextControl
+					label={ __( 'Cache TTL (seconds)', 'commerceflow' ) }
+					help={ __(
+						'Time in seconds before the dashboard cache expires (30–3600).',
+						'commerceflow'
+					) }
+					type="number"
+					min={ 30 }
+					max={ 3600 }
+					value={ String( settings.dashboard_cache_ttl ) }
+					onChange={ handleTtlChange }
 				/>
 
 				<div style={ { marginTop: '24px' } }>

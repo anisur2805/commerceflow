@@ -23,19 +23,28 @@ test.describe( 'CommerceFlow Dashboard', () => {
 	} );
 
 	test( 'Dashboard page loads metric cards', async ( { page } ) => {
-		// Navigate to dashboard (default route).
 		await page.waitForSelector( 'text=/Dashboard/i', { timeout: 10000 } );
-
-		// Expect at least one metric card heading.
 		const cards = page.locator( 'h3' );
 		await expect( cards.first() ).toBeVisible();
 	} );
 
-	test( 'Settings page allows toggle and save', async ( { page } ) => {
+	test( 'Settings page shows cache TTL input field', async ( { page } ) => {
+		await page.click( 'text=Settings' );
+		await page.waitForSelector( 'text=/Cache TTL/i', { timeout: 10000 } );
+		const ttlInput = page.locator( 'input[type="number"]' );
+		await expect( ttlInput ).toBeVisible();
+	} );
+
+	test( 'Settings save shows success toast', async ( { page } ) => {
 		await page.click( 'text=Settings' );
 		await page.waitForSelector( 'text=/Save Settings/i', { timeout: 10000 } );
 
 		const saveButton = page.getByRole( 'button', { name: /save settings/i } );
-		await expect( saveButton ).toBeVisible();
+		await saveButton.click();
+
+		// Toast/notice should appear after save attempt.
+		await expect(
+			page.getByText( /Settings saved/i )
+		).toBeVisible( { timeout: 10000 } );
 	} );
 } );

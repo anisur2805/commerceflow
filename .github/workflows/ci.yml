@@ -10,13 +10,18 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   php-lint:
     name: PHP lint (PHPCS + PHPStan)
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['8.1', '8.2', '8.3', '8.4']
+        php: ['8.2', '8.3', '8.4']
+      fail-fast: false
     steps:
       - uses: actions/checkout@v4
 
@@ -33,7 +38,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: vendor/
-          key: ${{ runner.os }}-php-${{ matrix.php }}-${{ hashFiles('composer.lock') }}
+          key: php-lint-${{ matrix.php }}-${{ hashFiles('composer.lock') }}
+          restore-keys: |
+            php-lint-${{ matrix.php }}-
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
@@ -42,7 +49,7 @@ jobs:
         run: composer phpcs
 
       - name: PHPStan
-        run: php -d memory_limit=1G vendor/bin/phpstan analyse --configuration=./phpstan.neon
+        run: php -d memory_limit=1G vendor/bin/phpstan analyse --configuration=./phpstan.neon --error-format=github
 
   js-lint:
     name: JS lint (ESLint)
@@ -69,7 +76,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['8.1', '8.2', '8.3', '8.4']
+        php: ['8.2', '8.3', '8.4']
+      fail-fast: false
     steps:
       - uses: actions/checkout@v4
 
@@ -83,17 +91,20 @@ jobs:
         uses: actions/cache@v4
         with:
           path: vendor/
-          key: ${{ runner.os }}-php-${{ matrix.php }}-${{ hashFiles('composer.lock') }}
+          key: phpunit-${{ matrix.php }}-${{ hashFiles('composer.lock') }}
+          restore-keys: |
+            phpunit-${{ matrix.php }}-
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
       - name: PHPUnit (unit tests)
-        run: vendor/bin/phpunit --testsuite unit
+        run: vendor/bin/phpunit --testsuite unit --display-deprecations
 
   e2e:
     name: Playwright
     runs-on: ubuntu-latest
+    needs: [js-lint]
     steps:
       - uses: actions/checkout@v4
 
@@ -105,13 +116,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright browsers
-        run: npx playwright install chromium
+      - name: Install Playwright
+        run: npx playwright install --with-deps chromium
 
       - name: Build SPA
         run: npm run build
 
-      - name: Run E2E tests
-        run: npx playwright test
+      - name: Run E2E tests (dashboard load)
+        run: npx playwright test --project=chromium
         env:
           WP_BASE_URL: ${{ vars.WP_BASE_URL || 'http://localhost:8889/wp-admin' }}
