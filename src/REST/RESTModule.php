@@ -50,5 +50,7 @@ class RESTModule implements ModuleInterface {
 		$dashboard->register_routes();
 
 		( new SettingsController() )->register_routes();
+
+		( new AutomationController() )->register_routes();
 	}
 }

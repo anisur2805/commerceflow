@@ -46,6 +46,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
 	{ path: '/dashboard', label: __( 'Dashboard', 'commerceflow' ) },
+	{ path: '/automation', label: __( 'Automation', 'commerceflow' ) },
 	{ path: '/settings', label: __( 'Settings', 'commerceflow' ) },
 ];
 

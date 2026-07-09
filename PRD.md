@@ -3,7 +3,7 @@
 |                  |                                      |
 | ---------------- | ------------------------------------ |
 | **Document**     | `PRD.md` (doc 00 of the `docs/` set) |
-| **Status**       | Draft — v0.1 scope approved          |
+| **Status**       | Draft — v0.1 + v0.2 scopes shipped |
 | **Owner**        | Anisur Rahman (ClanDevs)             |
 | **Doc version**  | 1.0                                  |
 | **Last updated** | 2026-07-09                           |
@@ -298,3 +298,4 @@ Architecture Decision Records (ADRs) capture individual decisions (e.g. "HPOS-fi
 | Version | Date       | Change                                                                                                                                                                                                                            |
 | ------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1.0     | 2026-07-09 | Initial PRD. v0.1 (walking skeleton + Woo-native dashboard) scope approved; automation engine established as centerpiece with loop/idempotency/partial-failure as hard requirements; Stripe/import/coupons/checkout/CLI deferred. |
+| 1.1     | 2026-07-09 | v0.2 (Automation Rules Engine) shipped: rules + rule-log tables, trigger→condition→action model, async Action Scheduler execution, REST `/automation` CRUD + dry-run + logs, React rule builder, dashboard Automation Queue card. FR-AUTO-4..7 hard requirements met with passing tests. |

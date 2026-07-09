@@ -18,12 +18,19 @@ class Uninstaller {
 	 * Clears options, transients, and any custom tables.
 	 */
 	public static function uninstall(): void {
+		global $wpdb;
+
 		// Remove plugin options.
 		delete_option( 'commerceflow_settings' );
+		delete_option( 'commerceflow_db_version' );
 
 		// Remove cached data.
 		delete_transient( 'commerceflow_dashboard_data' );
 
-		// Future slices will clean up their own tables here.
+		// Drop automation tables (v0.2).
+		$rules_table = $wpdb->prefix . 'commerceflow_rules';
+		$logs_table  = $wpdb->prefix . 'commerceflow_rule_logs';
+		$wpdb->query( "DROP TABLE IF EXISTS {$rules_table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$wpdb->query( "DROP TABLE IF EXISTS {$logs_table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
 }

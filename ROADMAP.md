@@ -11,12 +11,12 @@ CommerceFlow ships in **vertical slices**. Each release is independently install
 - Dashboard shows WooCommerce-native metrics only, cached with defined TTL + invalidation.
 - Green CI (PHPCS + PHPStan + ESLint + PHPUnit); README with dashboard screenshot.
 
-## v0.2 — Automation Rules Engine (centerpiece)
+## v0.2 — Automation Rules Engine (centerpiece) — shipped
 
 - Dedicated rules + rule-log tables; model _trigger → condition(s) → action(s)_, evaluated async via Action Scheduler.
-- React rule builder (create/edit/enable/disable/priority/test); REST `/automation` CRUD.
+- React rule builder (create/edit/enable/disable/delete/test-dry-run); REST `/automation` CRUD + `/automation/{id}/dry-run` + `/automation/logs`.
 - Dashboard gains an Automation Queue card.
-- Hard requirements: loop prevention, idempotency under retry, partial-failure handling, dry-run.
+- Hard requirements: loop prevention (RecursionGuard), idempotency under retry (IdempotencyStore), partial-failure handling (ExecutionPolicy continue/stop), dry-run (DryRunReporter).
 
 ## v0.3 — Order Workflow & Timeline
 

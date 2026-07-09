@@ -10,6 +10,26 @@ All notable changes to CommerceFlow are documented here. Format follows
 
 - Repository foundation: PRD, `CLAUDE.md`, Claude Code agents, `.claude/settings.json` (permissions + hooks), README, ROADMAP.
 
+## [0.2.0] — 2026-07-09
+
+### Added
+
+- Automation Rules Engine (centerpiece): dedicated `commerceflow_rules` + `commerceflow_rule_logs` tables created on activation via `dbDelta`; cleaned up on uninstall.
+- Rule model: _trigger → condition(s) → action(s)_ — pure `Rule` DTO and `RuleValidator` with allowed triggers (`order_created`, `order_paid`, `order_failed`, `order_status_changed`), action types (`change_status`, `add_order_note`, `generate_coupon`, `call_webhook`), and condition operators (`eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `in`).
+- Pure engine layer (unit-tested, no WordPress dependency): `ConditionMatcher`, `ActionPlanner` / `PlannedAction`, `RuleEvaluator` (priority-ordered matching), `DryRunReporter`, `RecursionGuard` (loop prevention), `IdempotencyStore`, `ExecutionPolicy` / `ExecutionResult`.
+- Hard requirements: loop prevention (FR-AUTO-4), idempotency under Action Scheduler retry (FR-AUTO-5), partial-failure handling with `continue`/`stop` policy (FR-AUTO-6), dry-run with no side effects (FR-AUTO-7).
+- Async execution via Action Scheduler (FR-AUTO-3): trigger listeners schedule `commerceflow_execute_rule` jobs; the callback enforces the recursion guard, idempotency store, and execution policy, then logs the result.
+- `$wpdb`-backed `RuleRepository` and `RuleLogRepository` with JSON-encoded config/conditions/actions columns.
+- `ActionExecutor` applies planned actions to orders through the WooCommerce CRUD layer (status change, order note, coupon creation, signed-safe webhook).
+- REST API: `/commerceflow/v1/automation` CRUD (list, get, create, update, delete), `/automation/{id}/dry-run`, and `/automation/logs` — all capability-gated (`manage_woocommerce` read, `manage_options` write).
+- React/TypeScript Automation page: rule builder (create/edit/enable/disable/delete/test-dry-run) with modal editor, per-action-type config fields, and condition rows.
+- Dashboard gains an **Automation Queue** card showing recent automation run statuses (FR-DASH-3).
+- PHPUnit unit tests for the full pure engine layer (RuleValidator, ConditionMatcher, ActionPlanner, DryRunReporter, RuleEvaluator, RecursionGuard, IdempotencyStore, ExecutionPolicy) plus AutomationModule construction; feature test stubs for the `/automation` REST routes.
+
+### Fixed
+
+- PHPStan `excludePaths` `node_modules/` entry marked optional with `(?)` so the PHP lint CI job (no `npm install`) no longer fails.
+
 ## [0.1.0] — 2026-07-09
 
 ### Added

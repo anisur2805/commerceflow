@@ -28,6 +28,17 @@ interface DashboardData {
 	} >;
 }
 
+interface AutomationLog {
+	id: number;
+	rule_id: number;
+	order_id: number;
+	trigger: string;
+	status: string;
+	run_id: string;
+	detail: unknown;
+	created_at: string;
+}
+
 function formatCurrency( amount: number ): string {
 	return new Intl.NumberFormat( 'en-US', {
 		style: 'currency',
@@ -311,6 +322,106 @@ export function DashboardPage() {
 					) }
 				</div>
 			</div>
+
+			<div style={ { marginTop: '24px' } }>
+				<AutomationQueueCard />
+			</div>
+		</div>
+	);
+}
+
+/**
+ * Automation Queue card — recent automation rule executions (v0.2 slice).
+ */
+function AutomationQueueCard() {
+	const { data, isLoading, error } = useApiFetch< AutomationLog[] >(
+		'commerceflow/v1/automation/logs?per_page=8'
+	);
+
+	const statusColor: Record< string, string > = {
+		success: '#16a34a',
+		partial_failure: '#d97706',
+		failed: '#dc2626',
+		dry_run: '#6b7280',
+		suppressed: '#6b7280',
+	};
+
+	let body;
+	if ( error ) {
+		body = (
+			<p style={ { color: '#dc2626', fontSize: '13px' } }>
+				{ __( 'Error loading', 'commerceflow' ) }
+			</p>
+		);
+	} else if ( isLoading ) {
+		body = (
+			<p style={ { color: '#9ca3af' } }>
+				{ __( 'Loading…', 'commerceflow' ) }
+			</p>
+		);
+	} else if ( ( data?.length ?? 0 ) === 0 ) {
+		body = (
+			<p style={ { color: '#9ca3af', fontSize: '13px' } }>
+				{ __( 'No recent automation runs.', 'commerceflow' ) }
+			</p>
+		);
+	} else {
+		body = (
+			<table style={ { width: '100%', borderCollapse: 'collapse' } }>
+				<tbody>
+					{ data?.map( ( log ) => (
+						<tr
+							key={ log.id }
+							style={ { borderBottom: '1px solid #f3f4f6' } }
+						>
+							<td
+								style={ {
+									padding: '8px 4px',
+									fontSize: '13px',
+								} }
+							>
+								#{ log.rule_id } ·{ ' ' }
+								{ log.trigger.replace( /_/g, ' ' ) }
+							</td>
+							<td
+								style={ {
+									padding: '8px 4px',
+									fontSize: '12px',
+									textAlign: 'right',
+									color:
+										statusColor[ log.status ] ?? '#6b7280',
+									fontWeight: 600,
+								} }
+							>
+								{ log.status.replace( /_/g, ' ' ) }
+							</td>
+						</tr>
+					) ) }
+				</tbody>
+			</table>
+		);
+	}
+
+	return (
+		<div
+			style={ {
+				background: '#fff',
+				borderRadius: '8px',
+				padding: '20px',
+				boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+			} }
+		>
+			<h2
+				style={ {
+					margin: '0 0 16px',
+					fontSize: '16px',
+					fontWeight: 600,
+					color: '#111827',
+				} }
+			>
+				{ __( 'Automation Queue', 'commerceflow' ) }
+			</h2>
+			{ body }
 		</div>
 	);
 }

@@ -10,7 +10,7 @@ parameters:
 		- vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
 	excludePaths:
 		- vendor/
-		- node_modules/
+		- node_modules/ (?)
 	tmpDir: /tmp/commerceflow-phpstan
 	parallel:
 		maximumNumberOfProcesses: 1
