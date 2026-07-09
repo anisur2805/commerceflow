@@ -96,11 +96,16 @@ class AdminModule implements ModuleInterface {
 		}
 
 		$asset_file = COMMERCEFLOW_DIR . '/assets/build/index.asset.php';
-		if ( ! file_exists( $asset_file ) ) {
-			return;
-		}
 
-		$asset = require $asset_file;
+		// Defaults for when the build file does not exist (e.g. CI).
+		$asset = array(
+			'dependencies' => array(),
+			'version'      => COMMERCEFLOW_VERSION,
+		);
+
+		if ( file_exists( $asset_file ) ) {
+			$asset = (array) require $asset_file;
+		}
 
 		wp_enqueue_script(
 			'commerceflow-admin',

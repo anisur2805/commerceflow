@@ -11,6 +11,10 @@ parameters:
 	excludePaths:
 		- vendor/
 		- node_modules/ (?)
+		- assets/
 	tmpDir: /tmp/commerceflow-phpstan
 	parallel:
 		maximumNumberOfProcesses: 1
+	reportUnmatchedIgnoredErrors: false
+	ignoreErrors:
+		- "#Path in require.*index\\.asset\\.php.*is not a file or it does not exist.#"
