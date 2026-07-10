@@ -26,6 +26,7 @@ interface DashboardData {
 		quantity: number;
 		total: number;
 	} >;
+	fulfillment: Array< { status: string; label: string; count: number } >;
 }
 
 interface AutomationLog {
@@ -323,9 +324,92 @@ export function DashboardPage() {
 				</div>
 			</div>
 
-			<div style={ { marginTop: '24px' } }>
+			<div
+				style={ {
+					display: 'grid',
+					gridTemplateColumns: '1fr 1fr',
+					gap: '24px',
+					marginTop: '24px',
+				} }
+			>
+				<FulfillmentCard
+					data={ data?.fulfillment ?? [] }
+					loading={ isLoading }
+				/>
 				<AutomationQueueCard />
 			</div>
+		</div>
+	);
+}
+
+/**
+ * Fulfillment card — open orders per custom workflow status (v0.3 slice).
+ * @param root0
+ * @param root0.data
+ * @param root0.loading
+ */
+function FulfillmentCard( {
+	data,
+	loading,
+}: {
+	data: Array< { status: string; label: string; count: number } >;
+	loading: boolean;
+} ) {
+	return (
+		<div
+			style={ {
+				background: '#fff',
+				borderRadius: '8px',
+				padding: '20px',
+				boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+			} }
+		>
+			<h2
+				style={ {
+					margin: '0 0 16px',
+					fontSize: '16px',
+					fontWeight: 600,
+					color: '#111827',
+				} }
+			>
+				{ __( 'Fulfillment', 'commerceflow' ) }
+			</h2>
+			{ loading ? (
+				<p style={ { color: '#9ca3af' } }>
+					{ __( 'Loading…', 'commerceflow' ) }
+				</p>
+			) : (
+				<table style={ { width: '100%', borderCollapse: 'collapse' } }>
+					<tbody>
+						{ data.map( ( row ) => (
+							<tr
+								key={ row.status }
+								style={ { borderBottom: '1px solid #f3f4f6' } }
+							>
+								<td
+									style={ {
+										padding: '8px 4px',
+										fontSize: '13px',
+									} }
+								>
+									{ row.label }
+								</td>
+								<td
+									style={ {
+										padding: '8px 4px',
+										fontSize: '14px',
+										textAlign: 'right',
+										fontWeight: 700,
+										color: '#111827',
+									} }
+								>
+									{ row.count }
+								</td>
+							</tr>
+						) ) }
+					</tbody>
+				</table>
+			) }
 		</div>
 	);
 }

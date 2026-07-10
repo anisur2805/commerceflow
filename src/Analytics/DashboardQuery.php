@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CommerceFlow\Analytics;
 
+use CommerceFlow\Workflow\OrderStatus;
 use DateTimeImmutable;
 
 /**
@@ -11,7 +12,7 @@ use DateTimeImmutable;
  *
  * All order reads go through the CRUD layer — no direct postmeta queries.
  *
- * @phpstan-type DashboardData array{orders_today: int, revenue_today: float, pending_orders: int, failed_payments: int, revenue_30d: array<int, array{date: string, revenue: float}>, top_products_30d: array<int, array{id: int, name: string, quantity: int, total: float}>}
+ * @phpstan-type DashboardData array{orders_today: int, revenue_today: float, pending_orders: int, failed_payments: int, revenue_30d: array<int, array{date: string, revenue: float}>, top_products_30d: array<int, array{id: int, name: string, quantity: int, total: float}>, fulfillment: array<int, array{status: string, label: string, count: int}>}
  */
 class DashboardQuery {
 
@@ -28,7 +29,32 @@ class DashboardQuery {
 			'failed_payments'  => $this->get_failed_payments(),
 			'revenue_30d'      => $this->get_revenue_series_30d(),
 			'top_products_30d' => $this->get_top_products_30d(),
+			'fulfillment'      => $this->get_fulfillment_counts(),
 		);
+	}
+
+	/**
+	 * Count open orders in each custom fulfillment status (v0.3 card).
+	 *
+	 * @return array<int, array{status: string, label: string, count: int}>
+	 */
+	public function get_fulfillment_counts(): array {
+		$counts = array();
+		foreach ( OrderStatus::labels() as $slug => $label ) {
+			$orders   = wc_get_orders(
+				array(
+					'status' => 'wc-' . $slug,
+					'limit'  => -1,
+					'return' => 'ids',
+				)
+			);
+			$counts[] = array(
+				'status' => $slug,
+				'label'  => $label,
+				'count'  => count( $orders ),
+			);
+		}
+		return $counts;
 	}
 
 	/**
