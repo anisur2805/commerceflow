@@ -70,29 +70,53 @@ class Activator {
 			INDEX idx_cf_logs_status (status)
 		) {$charset_collate};";
 
+		// Order timeline events (v0.3).
+		$events_sql = "CREATE TABLE IF NOT EXISTS {$prefix}order_events (
+			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+			order_id BIGINT UNSIGNED NOT NULL,
+			type VARCHAR(30) NOT NULL,
+			from_status VARCHAR(50) NULL,
+			to_status VARCHAR(50) NULL,
+			actor VARCHAR(191) NULL,
+			note LONGTEXT NULL,
+			created_at DATETIME NOT NULL,
+			PRIMARY KEY  (id),
+			INDEX idx_cf_events_order (order_id)
+		) {$charset_collate};";
+
 		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query( $rules_sql );
 		$rules_ok = ! $wpdb->last_error;
 
 		$wpdb->query( $logs_sql );
 		$logs_ok = ! $wpdb->last_error;
+
+		$wpdb->query( $events_sql );
+		$events_ok = ! $wpdb->last_error;
 		// phpcs:enable
 
-		return $rules_ok && $logs_ok;
+		return $rules_ok && $logs_ok && $events_ok;
 	}
 
 	/**
-	 * Check whether the v0.2 tables exist.
+	 * Check whether all plugin tables exist.
 	 */
 	public static function tables_exist(): bool {
 		global $wpdb;
 
-		$rules_table = $wpdb->prefix . 'commerceflow_rules';
-		$logs_table  = $wpdb->prefix . 'commerceflow_rule_logs';
+		$tables = array(
+			$wpdb->prefix . 'commerceflow_rules',
+			$wpdb->prefix . 'commerceflow_rule_logs',
+			$wpdb->prefix . 'commerceflow_order_events',
+		);
 
-		$rules = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $rules_table ) );
-		$logs  = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $logs_table ) );
+		foreach ( $tables as $table ) {
+			$found = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+			if ( empty( $found ) ) {
+				return false;
+			}
+		}
 
-		return ! empty( $rules ) && ! empty( $logs );
+		return true;
 	}
 }

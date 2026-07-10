@@ -47,6 +47,7 @@ class ModuleLoader {
 		$this->modules[] = \CommerceFlow\Analytics\AnalyticsModule::class;
 		$this->modules[] = \CommerceFlow\Cache\CacheModule::class;
 		$this->modules[] = \CommerceFlow\Automation\AutomationModule::class;
+		$this->modules[] = \CommerceFlow\Workflow\WorkflowModule::class;
 	}
 
 	/**

@@ -5,7 +5,7 @@ A WooCommerce operations & automation platform: a single modern React admin dash
 > **Status:** [v0.1 released](CHANGELOG.md#010--2026-07-09) — Walking skeleton + dashboard. See [`ROADMAP.md`](ROADMAP.md) for what's planned.
 
 ![CommerceFlow Dashboard](.github/screenshot-dashboard.png)
-*A screenshot of the CommerceFlow dashboard will be added here once a test store is available.*
+_A screenshot of the CommerceFlow dashboard will be added here once a test store is available._
 
 ## Requirements
 
