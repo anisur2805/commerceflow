@@ -52,5 +52,9 @@ class RESTModule implements ModuleInterface {
 		( new SettingsController() )->register_routes();
 
 		( new AutomationController() )->register_routes();
+
+		( new OrdersController() )->register_routes();
+
+		( new LogsController() )->register_routes();
 	}
 }
