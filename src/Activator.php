@@ -84,6 +84,20 @@ class Activator {
 			INDEX idx_cf_events_order (order_id)
 		) {$charset_collate};";
 
+		// Shipping rules (v0.4).
+		$shipping_sql = "CREATE TABLE IF NOT EXISTS {$prefix}shipping_rules (
+			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+			name VARCHAR(255) NOT NULL,
+			conditions LONGTEXT NULL,
+			rate LONGTEXT NULL,
+			enabled TINYINT(1) NOT NULL DEFAULT 0,
+			priority INT NOT NULL DEFAULT 0,
+			created_at DATETIME NOT NULL,
+			updated_at DATETIME NOT NULL,
+			PRIMARY KEY  (id),
+			INDEX idx_cf_shipping_enabled (enabled)
+		) {$charset_collate};";
+
 		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query( $rules_sql );
 		$rules_ok = ! $wpdb->last_error;
@@ -93,9 +107,12 @@ class Activator {
 
 		$wpdb->query( $events_sql );
 		$events_ok = ! $wpdb->last_error;
+
+		$wpdb->query( $shipping_sql );
+		$shipping_ok = ! $wpdb->last_error;
 		// phpcs:enable
 
-		return $rules_ok && $logs_ok && $events_ok;
+		return $rules_ok && $logs_ok && $events_ok && $shipping_ok;
 	}
 
 	/**
@@ -108,6 +125,7 @@ class Activator {
 			$wpdb->prefix . 'commerceflow_rules',
 			$wpdb->prefix . 'commerceflow_rule_logs',
 			$wpdb->prefix . 'commerceflow_order_events',
+			$wpdb->prefix . 'commerceflow_shipping_rules',
 		);
 
 		foreach ( $tables as $table ) {

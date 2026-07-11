@@ -27,12 +27,14 @@ class Uninstaller {
 		// Remove cached data.
 		delete_transient( 'commerceflow_dashboard_data' );
 
-		// Drop plugin tables (v0.2 automation + v0.3 order events).
-		$rules_table  = $wpdb->prefix . 'commerceflow_rules';
-		$logs_table   = $wpdb->prefix . 'commerceflow_rule_logs';
-		$events_table = $wpdb->prefix . 'commerceflow_order_events';
+		// Drop plugin tables (v0.2 automation + v0.3 order events + v0.4 shipping).
+		$rules_table    = $wpdb->prefix . 'commerceflow_rules';
+		$logs_table     = $wpdb->prefix . 'commerceflow_rule_logs';
+		$events_table   = $wpdb->prefix . 'commerceflow_order_events';
+		$shipping_table = $wpdb->prefix . 'commerceflow_shipping_rules';
 		$wpdb->query( "DROP TABLE IF EXISTS {$rules_table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "DROP TABLE IF EXISTS {$logs_table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "DROP TABLE IF EXISTS {$events_table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$wpdb->query( "DROP TABLE IF EXISTS {$shipping_table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
 }
