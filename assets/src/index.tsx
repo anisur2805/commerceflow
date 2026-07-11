@@ -19,6 +19,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { AutomationPage } from './pages/AutomationPage';
 import { OrdersPage } from './pages/OrdersPage';
+import { ShippingPage } from './pages/ShippingPage';
 
 domReady( () => {
 	const root = document.getElementById( 'commerceflow-root' );
@@ -37,6 +38,7 @@ domReady( () => {
 					<Route path="/dashboard" element={ <DashboardPage /> } />
 					<Route path="/automation" element={ <AutomationPage /> } />
 					<Route path="/orders" element={ <OrdersPage /> } />
+					<Route path="/shipping" element={ <ShippingPage /> } />
 					<Route path="/settings" element={ <SettingsPage /> } />
 				</Routes>
 			</AdminPage>
