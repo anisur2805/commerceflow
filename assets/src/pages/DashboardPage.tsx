@@ -27,6 +27,7 @@ interface DashboardData {
 		total: number;
 	} >;
 	fulfillment: Array< { status: string; label: string; count: number } >;
+	shipping: { total: number; enabled: number };
 }
 
 interface AutomationLog {
@@ -337,6 +338,10 @@ export function DashboardPage() {
 					loading={ isLoading }
 				/>
 				<AutomationQueueCard />
+				<ShippingCard
+					data={ data?.shipping ?? { total: 0, enabled: 0 } }
+					loading={ isLoading }
+				/>
 			</div>
 		</div>
 	);
@@ -409,6 +414,80 @@ function FulfillmentCard( {
 						) ) }
 					</tbody>
 				</table>
+			) }
+		</div>
+	);
+}
+
+/**
+ * Shipping card — rule-based shipping rule counts (v0.4 slice).
+ * @param root0
+ * @param root0.data
+ * @param root0.loading
+ * @param root0.data.total
+ * @param root0.data.enabled
+ */
+function ShippingCard( {
+	data,
+	loading,
+}: {
+	data: { total: number; enabled: number };
+	loading: boolean;
+} ) {
+	return (
+		<div
+			style={ {
+				background: '#fff',
+				borderRadius: '8px',
+				padding: '20px',
+				boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+			} }
+		>
+			<h2
+				style={ {
+					margin: '0 0 16px',
+					fontSize: '16px',
+					fontWeight: 600,
+					color: '#111827',
+				} }
+			>
+				{ __( 'Shipping', 'commerceflow' ) }
+			</h2>
+			{ loading ? (
+				<p style={ { color: '#9ca3af' } }>
+					{ __( 'Loading…', 'commerceflow' ) }
+				</p>
+			) : (
+				<div style={ { display: 'flex', gap: '24px' } }>
+					<div>
+						<div
+							style={ {
+								fontSize: '28px',
+								fontWeight: 700,
+								color: '#111827',
+							} }
+						>
+							{ data.enabled }
+						</div>
+						<div style={ { fontSize: '13px', color: '#6b7280' } }>
+							{ __( 'Active rules', 'commerceflow' ) }
+						</div>
+					</div>
+					<div>
+						<div
+							style={ {
+								fontSize: '28px',
+								fontWeight: 700,
+								color: '#9ca3af',
+							} }
+						>
+							{ data.total }
+						</div>
+						<div style={ { fontSize: '13px', color: '#6b7280' } }>
+							{ __( 'Total rules', 'commerceflow' ) }
+						</div>
+					</div>
+				</div>
 			) }
 		</div>
 	);

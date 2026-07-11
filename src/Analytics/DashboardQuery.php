@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CommerceFlow\Analytics;
 
+use CommerceFlow\Shipping\ShippingRuleRepository;
 use CommerceFlow\Workflow\OrderStatus;
 use DateTimeImmutable;
 
@@ -12,7 +13,7 @@ use DateTimeImmutable;
  *
  * All order reads go through the CRUD layer — no direct postmeta queries.
  *
- * @phpstan-type DashboardData array{orders_today: int, revenue_today: float, pending_orders: int, failed_payments: int, revenue_30d: array<int, array{date: string, revenue: float}>, top_products_30d: array<int, array{id: int, name: string, quantity: int, total: float}>, fulfillment: array<int, array{status: string, label: string, count: int}>}
+ * @phpstan-type DashboardData array{orders_today: int, revenue_today: float, pending_orders: int, failed_payments: int, revenue_30d: array<int, array{date: string, revenue: float}>, top_products_30d: array<int, array{id: int, name: string, quantity: int, total: float}>, fulfillment: array<int, array{status: string, label: string, count: int}>, shipping: array{total: int, enabled: int}}
  */
 class DashboardQuery {
 
@@ -30,6 +31,27 @@ class DashboardQuery {
 			'revenue_30d'      => $this->get_revenue_series_30d(),
 			'top_products_30d' => $this->get_top_products_30d(),
 			'fulfillment'      => $this->get_fulfillment_counts(),
+			'shipping'         => $this->get_shipping_summary(),
+		);
+	}
+
+	/**
+	 * Summarize shipping rules for the dashboard card (v0.4 card).
+	 *
+	 * @return array{total: int, enabled: int}
+	 */
+	public function get_shipping_summary(): array {
+		$rules   = ( new ShippingRuleRepository() )->find_all();
+		$enabled = 0;
+		foreach ( $rules as $rule ) {
+			if ( $rule->enabled ) {
+				++$enabled;
+			}
+		}
+
+		return array(
+			'total'   => count( $rules ),
+			'enabled' => $enabled,
 		);
 	}
 
