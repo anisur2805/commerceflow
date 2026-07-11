@@ -174,6 +174,8 @@ class ShippingController extends WP_REST_Controller {
 			);
 		}
 
+		do_action( 'commerceflow_shipping_rules_changed' );
+
 		return rest_ensure_response( $this->serialize( $repo->find( $id ) ) );
 	}
 
@@ -199,6 +201,8 @@ class ShippingController extends WP_REST_Controller {
 
 		$repo->update( $id, $clean );
 
+		do_action( 'commerceflow_shipping_rules_changed' );
+
 		return rest_ensure_response( $this->serialize( $repo->find( $id ) ) );
 	}
 
@@ -217,6 +221,8 @@ class ShippingController extends WP_REST_Controller {
 		}
 
 		$repo->delete( $id );
+
+		do_action( 'commerceflow_shipping_rules_changed' );
 
 		return rest_ensure_response(
 			array(

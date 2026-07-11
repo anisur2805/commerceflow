@@ -24,8 +24,9 @@ class Uninstaller {
 		delete_option( 'commerceflow_settings' );
 		delete_option( 'commerceflow_db_version' );
 
-		// Remove cached data.
+		// Remove cached data (legacy unversioned key + current version-scoped key).
 		delete_transient( 'commerceflow_dashboard_data' );
+		delete_transient( \CommerceFlow\Cache\CacheModule::transient_key() );
 
 		// Drop plugin tables (v0.2 automation + v0.3 order events + v0.4 shipping).
 		$rules_table    = $wpdb->prefix . 'commerceflow_rules';

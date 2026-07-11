@@ -20,11 +20,23 @@ class CacheModule implements ModuleInterface {
 	public const CACHE_TTL = 300;
 
 	/**
-	 * Transient key for dashboard data.
+	 * Base transient key for dashboard data. The live key is version-scoped
+	 * (see transient_key()) so a plugin upgrade that changes the payload
+	 * shape never serves a stale blob missing newly-added fields.
 	 *
 	 * @var string
 	 */
 	public const DASHBOARD_TRANSIENT = 'commerceflow_dashboard_data';
+
+	/**
+	 * Version-scoped transient key for dashboard data.
+	 *
+	 * @return string
+	 */
+	public static function transient_key(): string {
+		$version = defined( 'COMMERCEFLOW_VERSION' ) ? COMMERCEFLOW_VERSION : 'dev';
+		return self::DASHBOARD_TRANSIENT . '_' . $version;
+	}
 
 	/**
 	 * DI container.
@@ -51,6 +63,8 @@ class CacheModule implements ModuleInterface {
 		add_action( 'woocommerce_new_order', array( $this, 'invalidate_dashboard' ) );
 		add_action( 'woocommerce_update_order', array( $this, 'invalidate_dashboard' ) );
 		add_action( 'woocommerce_order_status_changed', array( $this, 'invalidate_dashboard' ) );
+		// Non-order data that feeds dashboard cards (e.g. shipping rules).
+		add_action( 'commerceflow_shipping_rules_changed', array( $this, 'invalidate_dashboard' ) );
 	}
 
 	/**
@@ -69,7 +83,7 @@ class CacheModule implements ModuleInterface {
 	 * @return mixed
 	 */
 	public function remember( callable $compute ) {
-		$cached = get_transient( self::DASHBOARD_TRANSIENT );
+		$cached = get_transient( self::transient_key() );
 		if ( false !== $cached ) {
 			return $cached;
 		}
@@ -79,7 +93,7 @@ class CacheModule implements ModuleInterface {
 		$settings = get_option( 'commerceflow_settings', $defaults );
 		$ttl      = CacheUtils::resolve_ttl( $settings, self::CACHE_TTL );
 
-		set_transient( self::DASHBOARD_TRANSIENT, $data, $ttl );
+		set_transient( self::transient_key(), $data, $ttl );
 		return $data;
 	}
 
@@ -87,6 +101,6 @@ class CacheModule implements ModuleInterface {
 	 * Invalidate the dashboard cache.
 	 */
 	public function invalidate_dashboard(): void {
-		delete_transient( self::DASHBOARD_TRANSIENT );
+		delete_transient( self::transient_key() );
 	}
 }
