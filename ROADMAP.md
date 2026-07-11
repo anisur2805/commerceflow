@@ -18,11 +18,11 @@ CommerceFlow ships in **vertical slices**. Each release is independently install
 - Dashboard gains an Automation Queue card.
 - Hard requirements: loop prevention (RecursionGuard), idempotency under retry (IdempotencyStore), partial-failure handling (ExecutionPolicy continue/stop), dry-run (DryRunReporter).
 
-## v0.3 — Order Workflow & Timeline
+## v0.3 — Order Workflow & Timeline — shipped
 
-- Custom HPOS-stored order statuses with guarded transitions.
-- Per-order timeline / activity log; REST `/orders`, `/logs`.
-- Dashboard gains a workflow/fulfillment card.
+- Custom HPOS-stored order statuses (Packing, Ready to Ship, Shipped) with guarded transitions (`TransitionGuard`) — invalid moves rejected, never persisted.
+- Per-order timeline / activity log merging status changes and automation actions; REST `/orders` (list, guarded transition, timeline) + `/logs`.
+- Dashboard gains a Fulfillment card.
 
 ## v0.4 — Shipping Rules Engine
 

@@ -10,6 +10,23 @@ All notable changes to CommerceFlow are documented here. Format follows
 
 - Repository foundation: PRD, `CLAUDE.md`, Claude Code agents, `.claude/settings.json` (permissions + hooks), README, ROADMAP.
 
+## [0.3.0] — 2026-07-11
+
+### Added
+
+- Order Workflow & Timeline slice (FR-FLOW-1, FR-FLOW-2).
+- Custom fulfillment order statuses — `cf-packing`, `cf-ready`, `cf-shipped` — registered HPOS-compatibly and read through the WooCommerce CRUD layer.
+- Pure, unit-tested workflow core: `OrderStatus` (status definitions) and `TransitionGuard` (guarded transition map). Invalid transitions are rejected with HTTP 409 and never persisted.
+- Dedicated `commerceflow_order_events` table (created on activation, dropped on uninstall) recording every status transition with its actor and timestamp via `OrderEventRepository`.
+- REST API: `/commerceflow/v1/orders` (workflow list), `/orders/{id}`, `/orders/{id}/transition` (guarded), `/orders/{id}/timeline` (status changes + automation actions merged), and `/logs` (global activity feed) — all capability-gated on `manage_woocommerce`.
+- React Orders page: workflow table with one-click guarded transitions and a per-order timeline modal.
+- Dashboard gains a **Fulfillment** card counting open orders per custom status (FR-DASH-3).
+- PHPUnit unit tests for `OrderStatus` and `TransitionGuard`; feature tests for the `/orders` and `/logs` route registration.
+
+### Changed
+
+- Admin SPA source normalized to the project ESLint config (tabs + single quotes) so `npm run lint` passes on `main`.
+
 ## [0.2.0] — 2026-07-09
 
 ### Added
