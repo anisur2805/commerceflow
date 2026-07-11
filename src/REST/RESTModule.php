@@ -56,5 +56,7 @@ class RESTModule implements ModuleInterface {
 		( new OrdersController() )->register_routes();
 
 		( new LogsController() )->register_routes();
+
+		( new ShippingController() )->register_routes();
 	}
 }
