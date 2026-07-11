@@ -10,6 +10,19 @@ All notable changes to CommerceFlow are documented here. Format follows
 
 - Repository foundation: PRD, `CLAUDE.md`, Claude Code agents, `.claude/settings.json` (permissions + hooks), README, ROADMAP.
 
+## [0.4.0] — 2026-07-11
+
+### Added
+
+- Shipping Rules Engine slice (FR-SHIP-1, FR-SHIP-2, FR-SHIP-3).
+- Pure, unit-tested core: `ShippingRuleValidator` (allowed fields — country, state, postcode, weight, subtotal, category, shipping_class, coupon; operators `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `in`, `contains`) and `ShippingRateResolver` (priority-ordered, first-match-wins). No WordPress dependency.
+- Dedicated `commerceflow_shipping_rules` table (created on activation, dropped on uninstall) with `$wpdb`-backed `ShippingRuleRepository`.
+- `ShippingModule` injects the winning rule's rate into WooCommerce packages via the `woocommerce_package_rates` filter — the live path and the preview tool share one resolver, so they agree by construction.
+- REST API: `/commerceflow/v1/shipping` CRUD (list, get, create, update, delete) and `/shipping/preview` (resolve a sample package with no side effects) — read gated on `manage_woocommerce`, writes on `manage_options`.
+- React Shipping page: rule table, create/edit modal with condition rows and rate fields, delete, and a preview tool.
+- Dashboard gains a **Shipping** card showing active vs. total rule counts (FR-DASH-3).
+- PHPUnit unit tests for `ShippingRuleValidator` and `ShippingRateResolver`; feature test for the `/shipping` route registration.
+
 ## [0.3.0] — 2026-07-11
 
 ### Added

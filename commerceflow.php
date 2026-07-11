@@ -3,7 +3,7 @@
  * Plugin Name:       CommerceFlow for WooCommerce
  * Plugin URI:        https://github.com/anisur2805/commerceflow
  * Description:       WooCommerce operations and automation platform — analytics dashboard, automation rules engine, order workflow, and shipping rules.
- * Version:           0.3.0
+ * Version:           0.4.0
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            Anisur Rahman
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define plugin constants.
-define( 'COMMERCEFLOW_VERSION', '0.3.0' );
+define( 'COMMERCEFLOW_VERSION', '0.4.0' );
 define( 'COMMERCEFLOW_FILE', __FILE__ );
 define( 'COMMERCEFLOW_DIR', __DIR__ );
 define( 'COMMERCEFLOW_URL', plugin_dir_url( __FILE__ ) );

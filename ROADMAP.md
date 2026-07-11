@@ -24,10 +24,10 @@ CommerceFlow ships in **vertical slices**. Each release is independently install
 - Per-order timeline / activity log merging status changes and automation actions; REST `/orders` (list, guarded transition, timeline) + `/logs`.
 - Dashboard gains a Fulfillment card.
 
-## v0.4 — Shipping Rules Engine
+## v0.4 — Shipping Rules Engine — shipped
 
-- Rule-based shipping (country/state/zip/weight/subtotal/category/class/coupon), priority-ordered, with test/preview.
-- REST `/shipping` CRUD; dashboard gains a Shipping Queue card.
+- Rule-based shipping (country/state/postcode/weight/subtotal/category/class/coupon), priority-ordered (first match wins), with a preview tool.
+- REST `/shipping` CRUD + `/shipping/preview`; live rates injected via `woocommerce_package_rates`. Dashboard gains a Shipping card.
 
 ## Deferred (not scheduled)
 

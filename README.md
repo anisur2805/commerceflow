@@ -2,7 +2,7 @@
 
 A WooCommerce operations & automation platform: a single modern React admin dashboard to observe your store and automate the order lifecycle — analytics, event-driven rules, custom fulfillment workflows, and rule-based shipping — without writing code.
 
-> **Status:** [v0.3 released](CHANGELOG.md) — Order workflow & timeline. See [`ROADMAP.md`](ROADMAP.md) for what's planned.
+> **Status:** [v0.4 released](CHANGELOG.md) — Shipping rules engine. See [`ROADMAP.md`](ROADMAP.md) for what's planned.
 
 ![CommerceFlow Dashboard](.github/screenshot-dashboard.png)
 _A screenshot of the CommerceFlow dashboard will be added here once a test store is available._
@@ -36,6 +36,13 @@ _A screenshot of the CommerceFlow dashboard will be added here once a test store
 - **Per-order timeline:** every status change and automation action, with actor and timestamp.
 - **REST API:** `/commerceflow/v1/orders` (list, guarded transition, timeline) and `/logs` (merged activity feed).
 - **React Orders page** with one-click transitions and a timeline modal, plus a dashboard **Fulfillment** card.
+
+### v0.4 — Shipping Rules Engine
+
+- **Rule-based shipping:** conditions on country, state, postcode, weight, subtotal, category, shipping class, and coupon — priority-ordered, first match wins.
+- **Live injection:** the winning rule's rate is added to the cart via `woocommerce_package_rates`; the same pure resolver powers the preview tool, so both agree.
+- **REST API:** `/commerceflow/v1/shipping` CRUD and `/shipping/preview` (no side effects).
+- **React Shipping page** with a rule builder and preview tool, plus a dashboard **Shipping** card.
 
 ## Development
 
