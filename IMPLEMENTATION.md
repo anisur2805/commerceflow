@@ -13,7 +13,7 @@ Product scope lives in [`PRD.md`](PRD.md); slice summary in [`ROADMAP.md`](ROADM
 
 ---
 
-## v0.1 — Walking skeleton + Dashboard (MVP) ← CURRENT
+## v0.1 — Walking skeleton + Dashboard (MVP) — shipped 0.1.0
 
 ### A. Toolchain & foundation
 
@@ -49,38 +49,38 @@ Product scope lives in [`PRD.md`](PRD.md); slice summary in [`ROADMAP.md`](ROADM
 
 ---
 
-## v0.2 — Automation Rules Engine (centerpiece) ← CURRENT
+## v0.2 — Automation Rules Engine (centerpiece) — shipped 0.2.0
 
-_Expand into steps when starting. Skeleton:_
+Shipped 2026-07-09 (see `CHANGELOG.md` `[0.2.0]`). Step-level ticks collapsed on ship; all work below is present in `src/Automation/*` and covered by unit tests.
 
-- [ ] Dedicated rules + rule-log tables (migration on activation) — **agent:** woo-backend
-- [ ] Engine core: _trigger → condition(s) → action(s)_, async via Action Scheduler — **agent:** automation-engine
-- [ ] Initial triggers (created/paid/failed/status-changed) + actions (change status/add note/generate coupon/webhook) — **agent:** automation-engine
-- [ ] **Hard requirements w/ tests:** loop prevention · idempotency under retry · partial-failure policy · dry-run — **agent:** automation-engine + qa-test
-- [ ] REST `/automation` CRUD — **agent:** woo-backend
-- [ ] React rule builder (create/edit/enable/disable/priority/test) — **agent:** react-admin
-- [ ] Dashboard Automation Queue card — **agent:** react-admin
-- [ ] Tests + gate + review + tag `v0.2.0`
+- [x] Dedicated `commerceflow_rules` + `commerceflow_rule_logs` tables (migration on activation via `dbDelta`) — **agent:** woo-backend
+- [x] Engine core: _trigger → condition(s) → action(s)_, async via Action Scheduler — **agent:** automation-engine
+- [x] Initial triggers (created/paid/failed/status-changed) + actions (change status/add note/generate coupon/webhook) — **agent:** automation-engine
+- [x] **Hard requirements w/ tests:** loop prevention · idempotency under retry · partial-failure policy · dry-run — **agent:** automation-engine + qa-test
+- [x] REST `/automation` CRUD + `/automation/{id}/dry-run` + `/automation/logs` — **agent:** woo-backend
+- [x] React rule builder (create/edit/enable/disable/priority/test-dry-run) — **agent:** react-admin
+- [x] Dashboard Automation Queue card — **agent:** react-admin
+- [x] Tests + gate + review + tag `v0.2.0`
 
-## v0.3 — Order Workflow & Timeline
+## v0.3 — Order Workflow & Timeline — shipped 0.3.0
 
-_Expand when starting._
+Shipped 2026-07-11 (see `CHANGELOG.md` `[0.3.0]`). All work below present in `src/Workflow/*` and covered by unit tests.
 
-- [ ] Custom HPOS-stored order statuses + guarded transitions — **agent:** woo-backend
-- [ ] Per-order timeline / activity log — **agent:** woo-backend
-- [ ] REST `/orders` (workflow actions), `/logs` — **agent:** woo-backend
-- [ ] Dashboard workflow/fulfillment card — **agent:** react-admin
-- [ ] Tests + gate + review + tag `v0.3.0`
+- [x] Custom HPOS-stored order statuses (`cf-packing`, `cf-ready`, `cf-shipped`) + guarded transitions (`TransitionGuard`) — **agent:** woo-backend
+- [x] Per-order timeline / activity log (`commerceflow_order_events` + `OrderEventRepository`) — **agent:** woo-backend
+- [x] REST `/orders` (workflow actions), `/logs` — **agent:** woo-backend
+- [x] Dashboard Fulfillment card — **agent:** react-admin
+- [x] Tests + gate + review + tag `v0.3.0`
 
-## v0.4 — Shipping Rules Engine
+## v0.4 — Shipping Rules Engine — shipped 0.4.0
 
-_Expand when starting._
+Shipped 2026-07-11 (see `CHANGELOG.md` `[0.4.0]`). All work below present in `src/Shipping/*` and covered by unit tests.
 
-- [ ] Rule-based shipping (country/state/zip/weight/subtotal/category/class/coupon), priority-ordered — **agent:** woo-backend
-- [ ] Test/preview tool (which rule wins) — **agent:** woo-backend
-- [ ] REST `/shipping` CRUD — **agent:** woo-backend
-- [ ] Dashboard Shipping Queue card — **agent:** react-admin
-- [ ] Tests + gate + review + tag `v0.4.0`
+- [x] Rule-based shipping (country/state/postcode/weight/subtotal/category/class/coupon), priority-ordered (first match wins) — **agent:** woo-backend
+- [x] Test/preview tool (which rule wins) — **agent:** woo-backend
+- [x] REST `/shipping` CRUD + `/shipping/preview` + live rate injection — **agent:** woo-backend
+- [x] Dashboard Shipping card — **agent:** react-admin
+- [x] Tests + gate + review + tag `v0.4.0`
 
 ---
 

@@ -90,5 +90,8 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
-      - name: PHPUnit (unit tests)
-        run: vendor/bin/phpunit --testsuite unit
+        - name: PHPUnit (unit tests)
+          # The `feature` suite exercises REST routes against a live WP/DB and is
+          # run manually against a WP test environment; it is intentionally not
+          # part of the lint CI gate (see NFR-QA-2: avoid flaky-test drag).
+          run: vendor/bin/phpunit --testsuite unit

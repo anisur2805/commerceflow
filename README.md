@@ -4,8 +4,7 @@ A WooCommerce operations & automation platform: a single modern React admin dash
 
 > **Status:** [v0.4 released](CHANGELOG.md) — Shipping rules engine. See [`ROADMAP.md`](ROADMAP.md) for what's planned.
 
-![CommerceFlow Dashboard](.github/screenshot-dashboard.png)
-_A screenshot of the CommerceFlow dashboard will be added here once a test store is available._
+_A dashboard screenshot will be added to `.github/screenshot-dashboard.png` once a test store is available._
 
 ## Requirements
 
