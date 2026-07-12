@@ -7,12 +7,12 @@
 /**
  * WordPress dependencies
  */
-import { useState, useCallback, useRef } from '@wordpress/element';
+import { useState, useCallback, useRef } from "@wordpress/element";
 
 export interface Toast {
-	id: string;
-	message: string;
-	type: 'success' | 'error' | 'info';
+  id: string;
+  message: string;
+  type: "success" | "error" | "info";
 }
 
 /**
@@ -21,27 +21,27 @@ export interface Toast {
  * @param dismissAfterMs Time before auto-dismiss (default 4000).
  * @return Hook state with toasts array, addToast, and removeToast.
  */
-export function useToast( dismissAfterMs = 4000 ) {
-	const [ toasts, setToasts ] = useState< Toast[] >( [] );
-	const counterRef = useRef( 0 );
+export function useToast(dismissAfterMs = 4000) {
+  const [toasts, setToasts] = useState<Toast[]>([]);
+  const counterRef = useRef(0);
 
-	const addToast = useCallback(
-		( message: string, type: Toast[ 'type' ] = 'info' ) => {
-			const id = `toast-${ ++counterRef.current }`;
-			const toast: Toast = { id, message, type };
+  const addToast = useCallback(
+    (message: string, type: Toast["type"] = "info") => {
+      const id = `toast-${++counterRef.current}`;
+      const toast: Toast = { id, message, type };
 
-			setToasts( ( prev ) => [ ...prev, toast ] );
+      setToasts((prev) => [...prev, toast]);
 
-			setTimeout( () => {
-				setToasts( ( prev ) => prev.filter( ( t ) => t.id !== id ) );
-			}, dismissAfterMs );
-		},
-		[ dismissAfterMs ]
-	);
+      setTimeout(() => {
+        setToasts((prev) => prev.filter((t) => t.id !== id));
+      }, dismissAfterMs);
+    },
+    [dismissAfterMs],
+  );
 
-	const removeToast = useCallback( ( id: string ) => {
-		setToasts( ( prev ) => prev.filter( ( t ) => t.id !== id ) );
-	}, [] );
+  const removeToast = useCallback((id: string) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
 
-	return { toasts, addToast, removeToast };
+  return { toasts, addToast, removeToast };
 }
